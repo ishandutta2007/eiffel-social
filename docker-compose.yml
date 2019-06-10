@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+    api:
+        build: ./api
+        container_name: eiffel-social-api
+        depends_on:
+            - db
+        environment:
+            API_PORT: $API_PORT
+            DOMAIN: $DOMAIN
+            DB_URL: $DB_URL
+            TOKEN_KEY: $TOKEN_KEY
+            NODE_ENV: $NODE_ENV
+        volumes:
+            - /eiffel-social-api/node_modules
+            - ./api:/eiffel-social-api
+
+    client:
+        build: ./client
+        container_name: eiffel-social-client
+        depends_on:
+            - api
+        environment:
+            DOMAIN: $DOMAIN
+            PORT: $CLIENT_PORT
+            NODE_ENV: $NODE_ENV
+        volumes:
+            - /eiffel-social-client/node_modules
+            - ./client:/eiffel-social-client
+
+    db:
+        image: postgres:10.4-alpine
+        container_name: eiffel-social-db
+        environment:
+            DB_URL: $DB_URL
+            POSTGRES_USER: $POSTGRES_USER
+            POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+            POSTGRES_DB: $POSTGRES_DB
+        volumes:
+            - ./db:/db
+
+    nginx:
+        build:
+            context: ./nginx
+            args:
+                API_PORT: $API_PORT
+                CLIENT_PORT: $CLIENT_PORT
+                DOMAIN: $DOMAIN
+        container_name: eiffel-social-nginx
+        depends_on:
+            - api
+            - client
+        ports:
+            - 443:443
+        volumes:
+            - ./client/build:/var/www/html
+            - ./nginx/certificates:/etc/nginx/external
