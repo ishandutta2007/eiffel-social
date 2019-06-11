@@ -10,5 +10,6 @@ COPY ./package.json $HOME
 RUN npm install --quiet
 
 COPY . $HOME
+RUN /usr/bin/crontab /eiffel-social-api/crontab.txt
 
-CMD ["npm", "run", "start_dev"]
+CMD $HOME/start.sh

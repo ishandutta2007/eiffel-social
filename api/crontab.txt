@@ -1,0 +1,1 @@
+* * * * * cd /eiffel-social-api && /usr/local/bin/node /eiffel-social-api/fetchUnseen.js 1>> /var/log/fetchUnseen.log 2>&1

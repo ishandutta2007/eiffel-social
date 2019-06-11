@@ -1,6 +1,6 @@
 const express = require('express');
 
-module.exports = function JacketRouter(jacketController) {
+module.exports = function QueueRouter(queueController) {
 
     const router = express.Router();
 

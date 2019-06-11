@@ -33,8 +33,8 @@ Promise.all([
     // Install all our middleware
     const commonComponent = require('./components/common')(logger, db);
     router.use(commonComponent);
-    const jacketComponent = require('./components/jacket')(db);
-    router.use('/jacket', jacketComponent);
+    const queueComponent = require('./components/queue')(db);
+    router.use('/queue', queueComponent);
     const tokenComponent = require('./components/token')(db);
     router.use('/token', tokenComponent);
 
