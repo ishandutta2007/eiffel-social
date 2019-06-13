@@ -1,0 +1,16 @@
+{
+  "google": {
+    "clientId": "YOUR_CLIENT_ID",
+    "clientSecret": "YOUR_CLIENT_SECRET",
+    "scope": "https://www.googleapis.com/auth/admin.directory.group",
+    "authorizationUrl": "https://accounts.google.com/o/oauth2/v2/auth",
+    "accessTokenUrl": "https://www.googleapis.com/oauth2/v4/token"
+  },
+  "hootsuite": {
+    "clientId": "YOUR_CLIENT_ID",
+    "clientSecret": "YOUR_CLIENT_SECRET",
+    "scope": "offline",
+    "authorizationUrl": "https://platform.hootsuite.com/oauth2/auth",
+    "accessTokenUrl": "https://platform.hootsuite.com/oauth2/token"
+  }
+}

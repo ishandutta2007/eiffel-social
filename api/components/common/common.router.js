@@ -23,7 +23,15 @@ module.exports = function CommonRouter(commonController, logger) {
         else {
             verifier = commonController.verifySignature;
         }
-        verifier(req.path, req.query, req.body)
+        let query;
+        if (req.path.startsWith('/auth/') && req.path.endsWith('/callback')) {
+            const state = req.query.state;
+            query = state ? JSON.parse(Buffer.from(state, 'base64').toString('utf8')) : {};
+        }
+        else {
+            query = req.query;
+        }
+        verifier(req.path, query, req.body)
             .then(() => { next(); })  // everything's OK: move on to the next handler
             .catch(next);             // pass any exception to the error handler
     });

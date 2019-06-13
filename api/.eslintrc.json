@@ -1,6 +1,6 @@
 {
     "parserOptions": {
-        "ecmaVersion": 8,
+        "ecmaVersion": 9,
         "sourceType": "module",
         "ecmaFeatures": {
             "arrowFunctions": true,
@@ -16,7 +16,7 @@
         "eqeqeq": "error",
         "curly": "error",
         "quotes": ["error", "single"],
-        "indent": ["error", 4],
+        "indent": ["warn", 4],
         "no-unreachable": "error",
         "no-unused-vars": "error",
         "no-undef": "error",

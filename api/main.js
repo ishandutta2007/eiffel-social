@@ -31,6 +31,8 @@ Promise.all([
     app.use('/api', router);
 
     // Install all our middleware
+    const authComponent = require('./components/auth')(db);
+    router.use('/auth', authComponent);
     const commonComponent = require('./components/common')(logger, db);
     router.use(commonComponent);
     const queueComponent = require('./components/queue')(db);
