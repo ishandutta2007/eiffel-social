@@ -71,10 +71,11 @@ module.exports = function(db) {
         }
         try {
             const tokenResponse = await got.post(accessTokenUrl, {
-                form: tokenQuery,
+                body: tokenQuery,
+                form: true,
                 headers: tokenHeaders,
-                responseType: 'json',
-            });
+                json: true,
+            }).body;
             const token = {
                 provider: provider,
                 accessToken: tokenResponse.access_token,
@@ -124,10 +125,11 @@ module.exports = function(db) {
         }
         try {
             const tokenResponse = await got.post(accessTokenUrl, {
-                form: tokenQuery,
+                body: tokenQuery,
+                form: true,
                 headers: tokenHeaders,
-                responseType: 'json',
-            });
+                json: true,
+            }).body;
             const newToken = {
                 provider: provider,
                 accessToken: tokenResponse.access_token,
