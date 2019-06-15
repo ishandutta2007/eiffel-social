@@ -22,18 +22,20 @@ const fetchUnseen = async (db) => {
 
 const initDb = require('./lib/initDb.js')(console);
 initDb.then(async (db) => {
+    const client = await db.connect();
     try {
-        await db.query('BEGIN');
-        const jids = await fetchUnseen(db);
-        await db.query('COMMIT');
+        await client.query('BEGIN');
+        const jids = await fetchUnseen(client);
+        await client.query('COMMIT');
         console.log(`${Date()} Fetched ${jids.length} jackets:`, jids);
     }
     catch (err) {
         console.error(err);
-        await db.query('ROLLBACK');
+        await client.query('ROLLBACK');
         return;
     }
     finally {
+        client.release();
         await db.end();
     }
 }).catch((err) => {

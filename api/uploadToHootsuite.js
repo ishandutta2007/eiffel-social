@@ -60,20 +60,24 @@ const initDb = require('./lib/initDb.js')(console);
 initDb.then(async (db) => {
 
     while (true) {
+        const client = await db.connect();
         try {
-            await db.query('BEGIN');
-            const jid = await getQueueJid(db);
+            await client.query('BEGIN');
+            const jid = await getQueueJid(client);
             if (jid === false) { throw { message: 'No more queued jackets!' }; }
-            const pids = await getPhotoIds(jid, db);
-            pids.forEach(async (pid) => await processPhoto(jid, pid, db));
-            await db.query(queueDeleteQuery, [HOOTSUITE_QID, jid]);
-            await db.query('COMMIT');
+            const pids = await getPhotoIds(jid, client);
+            pids.forEach(async (pid) => await processPhoto(jid, pid, client));
+            await client.query(queueDeleteQuery, [HOOTSUITE_QID, jid]);
+            await client.query('COMMIT');
             console.log(`${Date()} processed ${jid}`);
         }
         catch (err) {
             console.error(err);
-            await db.query('ROLLBACK');
+            await client.query('ROLLBACK');
             break;
+        }
+        finally {
+            client.release();
         }
     }
     await db.end();
