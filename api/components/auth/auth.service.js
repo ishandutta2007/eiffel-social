@@ -75,18 +75,19 @@ module.exports = function(db) {
                 form: true,
                 headers: tokenHeaders,
                 json: true,
-            }).body;
+            });
             const token = {
                 provider: provider,
-                accessToken: tokenResponse.access_token,
-                expiry: Date.now() + tokenResponse.expires_in * 1000,
-                refreshToken: tokenResponse.refresh_token,
-                raw: JSON.stringify(tokenResponse),
+                accessToken: tokenResponse.body.access_token,
+                expiry: Date.now() + tokenResponse.body.expires_in * 1000,
+                refreshToken: tokenResponse.body.refresh_token,
+                raw: JSON.stringify(tokenResponse.body),
             };
             await db.query(tokenInsertQuery, Object.values(token));
             return token;
         }
         catch (err) {
+            console.error('Error in getOauthAccessToken:', err, tokenQuery, tokenHeaders);
             return { accessToken: false, error: err };
         }
     };
@@ -129,14 +130,14 @@ module.exports = function(db) {
                 form: true,
                 headers: tokenHeaders,
                 json: true,
-            }).body;
+            });
             const newToken = {
                 provider: provider,
-                accessToken: tokenResponse.access_token,
-                expiry: Date.now() + tokenResponse.expires_in * 1000,
+                accessToken: tokenResponse.body.access_token,
+                expiry: Date.now() + tokenResponse.body.expires_in * 1000,
                 // Google reuses refresh tokens, but Hootsuite refresh tokens are one-time use
-                refreshToken: tokenResponse.refresh_token || token.refreshToken,
-                raw: JSON.stringify(tokenResponse),
+                refreshToken: tokenResponse.body.refresh_token || token.refreshToken,
+                raw: JSON.stringify(tokenResponse.body),
             };
             await db.query(tokenInsertQuery, Object.values(newToken));
             return newToken;
