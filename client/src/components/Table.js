@@ -96,8 +96,8 @@ class Table extends Component {
       const classNames = queueName === this.queueName ?
         "col text-center nav-item active" : "col text-center nav-item";
       return (
-        <div className={classNames}>
-          <a key={queueName} className="nav-link" href={`/queue/${queueName}`}>{Strings.tableTitle[queueName]}</a>
+        <div key={queueName} className={classNames}>
+          <a className="nav-link" href={`/queue/${queueName}`}>{Strings.tableTitle[queueName]}</a>
         </div>
       );
     });
