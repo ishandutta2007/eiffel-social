@@ -11,6 +11,7 @@ services:
             DOMAIN: $DOMAIN
             DB_URL: $DB_URL
             TOKEN_KEY: $TOKEN_KEY
+            GOOGLE_DOMAIN: $GOOGLE_DOMAIN
             NODE_ENV: $NODE_ENV
         volumes:
             - /eiffel-social-api/node_modules

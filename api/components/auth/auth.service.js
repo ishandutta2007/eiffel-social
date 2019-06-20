@@ -149,10 +149,31 @@ module.exports = function(db) {
         }
     };
 
+    const oauthApiCall = async (provider, method, endpoint, body) => {
+        const token = await getOauthData(provider);
+        if (!token) { return { status: 'missing_token', message: `Could not get token for ${provider}.` }; }
+        if (token.expiry < Date.now()) { return { status: 'stale_token', message: 'Could not get fresh token' }; }
+        const url = `${config[provider].apiPrefix}${endpoint}`;
+        const options = {
+            headers: { Authorization: `Bearer ${token.accessToken}` },
+            json: true,
+            method: method,
+        };
+        if (body) { options.body = body; }
+        try {
+            const response = await got(url, options);
+            return response.body;
+        }
+        catch (err) {
+            throw { status: 'error', response: err };
+        }
+    };
+
     return {
         getOauthAuthorizeUrl: getOauthAuthorizeUrl,
         getOauthAccessToken: getOauthAccessToken,
         getOauthData: getOauthData,
+        oauthApiCall: oauthApiCall,
     };
 
 };
