@@ -40,7 +40,7 @@ module.exports = function(db) {
     };
 
     const putParticipants = async (jid, participants) => {
-        return 'failed';
+        return { status: 'failed', message: 'Not implemented' };
     };
 
     return {

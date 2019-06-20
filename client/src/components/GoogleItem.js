@@ -5,18 +5,27 @@ import config from './config.json';
 import Strings from './assets/Strings.js';
 import { generateSignature } from './lib/TokenService.js';
 
+import greenCheck from './assets/green-check.svg';
+import redX from './assets/red-x.svg';
+
 class GoogleItem extends Component {
   constructor(props) {
     super(props);
-    this.state = { jacket: {}, participants: [], selectedParticipants: [], submitting: false };
+    this.state = {
+      answer: false,
+      jacket: {},
+      participants: [],
+      selectedParticipants: [],
+      submitting: false,
+    };
     this.credentials = JSON.parse(sessionStorage.getItem('user:credentials'));
     this.submitParticipants = this.submitParticipants.bind(this);
   }
 
-  itemUrl = (path) => {
+  itemUrl = (path, body) => {
     const { uid, token } = this.credentials;
     const now = Date.now();
-    const hmac = generateSignature({ uid: uid, time: now, path: path }, token);
+    const hmac = generateSignature({ uid: uid, time: now, path: path, ...body }, token);
     const urlBase = `https://${config.domain}/api${path}`;
     const urlQuery = `uid=${uid}&time=${now}&hmac=${encodeURIComponent(hmac)}`;
     return `${urlBase}?${urlQuery}`;
@@ -32,6 +41,19 @@ class GoogleItem extends Component {
       fetch(this.itemUrl(path))
         .then(this.checkResponse)
         .then((item) => resolve(item))
+        .catch((err) => reject(err));
+    });
+  };
+
+  uploadItem = (path, item) => {
+    return new Promise((resolve, reject) => {
+      fetch(this.itemUrl(path, item), {
+        body: JSON.stringify(item),
+        headers: { 'Content-Type': 'application/json' },
+        method: 'PUT',
+      })
+        .then(this.checkResponse)
+        .then((answer) => resolve(answer))
         .catch((err) => reject(err));
     });
   };
@@ -56,9 +78,17 @@ class GoogleItem extends Component {
   }
 
   submitParticipants = async () => {
+    const jid = this.props.match.params.jid;
     this.setState({ submitting: true });
     const selectedUids = this.state.selectedParticipants.map((participant) => participant.uid);
-    // TODO
+    try {
+      const answer = await this.uploadItem(`/queue/google/${jid}/participants`, selectedUids);
+      this.setState({ answer: answer });
+    }
+    catch (err) {
+      alert(`${Strings.fetchErrorMessage}: ${JSON.stringify(err)}`);
+    }
+    this.setState({ submitting: false });
   };
 
   render() {
@@ -76,10 +106,24 @@ class GoogleItem extends Component {
       <a href={`mailto:${email}`}>{fullname}</a>
     );
     const createdString = created ? new Date(created).toISOString() : '';
-    const participants = this.state.participants;
-    return (
+    const { answer, participants, submitting } = this.state;
+    return (answer) ? (
       <div>
-        <button disabled={this.state.submitting} onClick={this.submitParticipants} className={'btn btn-success col-md-3'}>
+        <div><img src={answer.status==='ok' ? greenCheck : redX} style={{ width: 100, height: 100 }} /></div>
+        <div>{answer.status}</div>
+        <div>{answer.message}</div>
+        { answer.remaining_members && (
+          <div className="table-responsive"><table className="table"><tbody>
+            { answer.remaining_members.map((member, index) => (
+              <tr key={index}><td>{member}</td></tr>
+            ))}
+          </tbody></table></div>
+        )}
+        <div><button onClick={() => this.props.history.push('/queue/google')} className={'btn btn-success col-md-3'}><span className="h5">{Strings.returnToQueue}</span></button></div>
+      </div>
+    ) : (
+      <div>
+        <button disabled={submitting} onClick={this.submitParticipants} className={'btn btn-success col-md-3'}>
           <span className="h5">{Strings.submitParticipants}</span>
         </button>
         <Select

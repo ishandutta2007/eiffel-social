@@ -20,12 +20,14 @@ const Strings = {
     created: 'Created',
     creator: 'Creator',
     expedition: 'Expedition',
+    fetchErrorMessage: 'Error fetch()ing item',
     jacketId: 'Jacket #',
     locality: 'Locality',
     specimenType: 'Specimen Type',
     // GoogleItem
     itemTitle: 'Jacket',
     participants: 'Participants',
+    returnToQueue: 'Return to Queue',
     submitParticipants: 'Submit Participants',
   },
   'es-MX': {
@@ -46,12 +48,14 @@ const Strings = {
     created: 'Creado',
     creator: 'Creador',
     expedition: 'Expedición',
+    fetchErrorMessage: 'Error al fetch() el elemento',
     jacketNumber: 'Sobrecubierta #',
     locality: 'Localidad',
     specimenType: 'Tipo de Muestra',
     // GoogleItem
     itemTitle: 'Sobrecubierta',
     participants: 'Partícipes',
+    returnToQueue: 'Volver a la Cola',
     submitParticipants: 'Enviar Partícipes',
   },
 };
