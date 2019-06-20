@@ -6,6 +6,7 @@ import './App.css';
 
 import Login from './Login.js';
 import { defaultQueueRender, Table } from './Table.js';
+import GoogleItem from './GoogleItem.js';
 
 const loggedInRender = () => {
   return sessionStorage.getItem('user:credentials') ? (
@@ -27,6 +28,7 @@ class App extends Component {
           <Route exact path="/login" component={Login} />
           <Route exact path="/queue" render={defaultQueueRender}/>
           <Route exact path="/queue/:queueName" component={Table} />
+          <Route exact path="/queue/google/:jid" component={GoogleItem} />
         </div>
       </Router>
     );

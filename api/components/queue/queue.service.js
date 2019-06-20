@@ -23,8 +23,31 @@ module.exports = function(db) {
         return jacketsSelectResult.rows;
     };
 
+    const jacketSelectQuery = `select j.jid, ${jacketFieldsString}, u.fullname, u.email from queue_items q left join jackets j on j.jid=q.jid left join users u on u.uid=j.juid where q.qid=$1 and j.jid=$2`;
+    const getQueueItem = async (provider, jid) => {
+        if (!(provider in qids)) { return {}; }
+        const qid = qids[provider];
+        const jacketSelectResult = await db.query(jacketSelectQuery, [qid, jid]);
+        if (!jacketSelectResult.rows.length) { return {}; }
+        return jacketSelectResult.rows[0];
+    };
+
+    const participantsSelectQuery = 'select uid, fullname, email from participants';
+    const getParticipants = async () => {
+        const participantsSelectResults = await db.query(participantsSelectQuery, []);
+        if (!participantsSelectResults.rows.length) { return []; }
+        return participantsSelectResults.rows;
+    };
+
+    const putParticipants = async (jid, participants) => {
+        return 'failed';
+    };
+
     return {
         getQueue: getQueue,
+        getQueueItem: getQueueItem,
+        getParticipants: getParticipants,
+        putParticipants: putParticipants,
     };
 
 };

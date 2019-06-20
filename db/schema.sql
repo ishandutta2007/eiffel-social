@@ -1,6 +1,7 @@
 -- We assume there are existing tables from the EiFFeL app: users, jackets, and photos
 
 drop table if exists oauth_tokens;
+drop table if exists participants;
 drop table if exists queue_items;
 drop table if exists seen_jackets;
 
@@ -10,6 +11,12 @@ create table oauth_tokens (
     expiry int8 not null,
     refreshToken varchar(256) not null,
     raw varchar(2048) not null
+);
+
+create table participants (
+    uid serial4 primary key,
+    fullName varchar(256) not null,
+    email varchar(256) not null
 );
 
 create table queue_items (

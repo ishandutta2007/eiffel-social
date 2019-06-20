@@ -23,6 +23,10 @@ const Strings = {
     jacketId: 'Jacket #',
     locality: 'Locality',
     specimenType: 'Specimen Type',
+    // GoogleItem
+    itemTitle: 'Jacket',
+    participants: 'Participants',
+    submitParticipants: 'Submit Participants',
   },
   'es-MX': {
     // Login
@@ -45,6 +49,10 @@ const Strings = {
     jacketNumber: 'Sobrecubierta #',
     locality: 'Localidad',
     specimenType: 'Tipo de Muestra',
+    // GoogleItem
+    itemTitle: 'Sobrecubierta',
+    participants: 'Partícipes',
+    submitParticipants: 'Enviar Partícipes',
   },
 };
 
