@@ -13,12 +13,12 @@ module.exports = function(queueService) {
     const getParticipants = async () => {
         const participants = await queueService.getParticipants();
         return participants;
-    }
+    };
 
     const putParticipants = async (jid, participants) => {
         const status = await queueService.putParticipants(jid, participants);
         return status;
-    }
+    };
 
     return {
         getQueue: getQueue,
