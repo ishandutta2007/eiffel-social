@@ -119,6 +119,9 @@ class GoogleItem extends Component {
             ))}
           </tbody></table></div>
         )}
+        { answer.draft_message && (
+          <div><pre>{answer.draft_message}</pre></div>
+        )}
         <div><button onClick={() => this.props.history.push('/queue/google')} className={'btn btn-success col-md-3'}><span className="h5">{Strings.returnToQueue}</span></button></div>
       </div>
     ) : (
