@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const got = require('got');
 const querystring = require('querystring');
 const DOMAIN = process.env.DOMAIN;
@@ -149,20 +150,41 @@ module.exports = function(db) {
         }
     };
 
+    const createMultipart = (gotOptions) => {
+        // NB: gotOptions is passed by reference and gets mutated
+        // set the multipart boundary
+        const boundary = crypto.randomBytes(16).toString('hex');
+        gotOptions.headers['Content-Type'] = `multipart/related; boundary=${boundary}`;
+        // got 9.6.0 won't allow a different body type when receiving JSON
+        gotOptions.headers['Accept'] = 'application/json';
+        gotOptions.json = false;
+        // build the body
+        const bodyStrings = [];
+        for (const part of gotOptions.body) {
+            bodyStrings.push(`--${boundary}\r\nContent-Type: ${part['Content-Type']}\r\n`);
+            bodyStrings.push(part.body);
+        }
+        bodyStrings.push(`--${boundary}--`);
+        gotOptions.body = bodyStrings.join('\r\n');
+    };
     const oauthApiCall = async (provider, method, endpoint, body) => {
         const token = await getOauthData(provider);
-        if (!token) { return { status: 'missing_token', message: `Could not get token for ${provider}.` }; }
-        if (token.expiry < Date.now()) { return { status: 'stale_token', message: 'Could not get fresh token' }; }
+        if (!token) { throw { status: 'missing_token', message: `Could not get token for ${provider}.` }; }
+        if (token.expiry < Date.now()) { throw { status: 'stale_token', message: 'Could not get fresh token' }; }
         const url = `${config[provider].apiPrefix}${endpoint}`;
         const options = {
             headers: { Authorization: `Bearer ${token.accessToken}` },
             json: true,
             method: method,
         };
-        if (body) { options.body = body; }
+        if (body) {
+            options.body = body;
+            if (Array.isArray(body)) { createMultipart(options); }
+        }
         try {
             const response = await got(url, options);
-            return response.body;
+            if (Array.isArray(body)) { return JSON.parse(response.body); }
+            else { return response.body; }
         }
         catch (err) {
             throw { status: 'error', response: err };

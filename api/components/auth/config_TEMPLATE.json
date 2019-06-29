@@ -3,7 +3,7 @@
     "clientId": "YOUR_CLIENT_ID",
     "clientSecret": "YOUR_CLIENT_SECRET",
     "apiPrefix": "https://www.googleapis.com",
-    "scope": "https://www.googleapis.com/auth/admin.directory.group https://www.googleapis.com/auth/apps.groups.settings https://www.googleapis.com/auth/gmail.compose",
+    "scope": "https://www.googleapis.com/auth/admin.directory.group https://www.googleapis.com/auth/apps.groups.settings https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/gmail.compose",
     "authorizationUrl": "https://accounts.google.com/o/oauth2/v2/auth",
     "accessTokenUrl": "https://www.googleapis.com/oauth2/v4/token"
   },
