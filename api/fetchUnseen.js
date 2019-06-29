@@ -16,7 +16,7 @@ const fetchUnseen = async (db) => {
   if (!jacketsSelectResult.rows.length) { return []; }
   const jids = jacketsSelectResult.rows.map((row) => row.jid);
   await db.query(jacketsInsertQuery, [jids, Array(jids.length).fill(now)]);
-  Object.values(qids).forEach(async (qid) => await db.query(queueInsertQuery, [Array(jids.length).fill(qid), jids]));
+  await Promise.all(Object.values(qids).map((qid) => db.query(queueInsertQuery, [Array(jids.length).fill(qid), jids])));
   return jids;
 };
 
