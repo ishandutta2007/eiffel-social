@@ -111,6 +111,24 @@ module.exports = function(db) {
         }
     };
     const _addMembersToGoogleGroup = async (email, gid, participants) => {
+        // add self as group owner
+        try {
+            const myProfile = await oauthApiCall('google', 'GET', '/gmail/v1/users/me/profile');
+            const participantSettings = {
+                delivery_settings: 'ALL_MAIL',
+                email: myProfile.emailAddress,
+                role: 'OWNER',
+            };
+            await oauthApiCall('google', 'POST', `/admin/directory/v1/groups/${gid}/members`, participantSettings);
+        }
+        catch (err) {
+            return {
+                status: 'ownership_failed',
+                message: `Group ${email} created.  However, a group owner could not be assigned to the group because ${JSON.stringify(err)}.  You will need to manually add users, and send a welcome message.  Copy the list of users, and save it in a spreadsheet to help you keep track of invitations.`,
+                remaining_members: participants,
+            };
+        }
+        // add participants as members
         let participant;
         while (participant = participants.pop()) {
             try {
@@ -155,7 +173,11 @@ module.exports = function(db) {
         const createResponse = await _createGoogleGroup(jid);
         if (createResponse.status !== 'ok') { return createResponse; }
         const { email, gid, jacketNumber } = createResponse;
-        const draftMessage = config.google.draftMessage.replace(/{email}/g, email).replace(/{jacketNumber}/g, jacketNumber).replace(/{unsubscribe}/g, email.replace('@', '+unsubscribe@'));
+        const draftMessage = config.google.draftMessage
+            .replace(/{email}/g, email)
+            .replace(/{jacketNumber}/g, jacketNumber)
+            .replace(/{unsubscribe}/g, email.replace('@', '+unsubscribe@'))
+            .replace(/{owners}/g, email.replace('@', '+owner@'));
         // remove the item from the queue: any retry would otherwise try to recreate the already created group
         await deleteQueueItem('google', jid);
         // update the group permissions
