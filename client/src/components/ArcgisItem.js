@@ -97,10 +97,12 @@ class ArcgisItem extends Component {
     } = this.state.jacket;
     const downloadPhotosLink = this.itemUrl(`/queue/arcgis/${jid}/photo`)
     const permitNumber = encodeURIComponent(this.state.permitNumber);
-    const collectionDate = encodeURIComponent(new Date(created).toLocaleDateString());
+    const collectionDate = new Date(created);
+    const pad = (n) => (n>9 ? n : '0' + n);
+    const collectionDateString = `${collectionDate.getFullYear()}-${pad(collectionDate.getMonth())}-${pad(collectionDate.getDate())}`;
     const comment = encodeURIComponent(notes);
     const photoId = encodeURIComponent(`Specimen #: ${jacketnumber} // Photo ID: [INSERT_PHOTO_ID]`);
-    const visitLink = `https://survey123.arcgis.com/share/${config.visitFormId}?field:PL_LCLTY_ID=${this.state.localityId}&field:LCLTY_PRMT_NB=${permitNumber}&field:LCLTY_CLLCT_DT=${collectionDate}&field:LCLTY_CMMNT_TX=${comment}`;
+    const visitLink = `https://survey123.arcgis.com/share/${config.visitFormId}?field:PL_LCLTY_ID=${this.state.localityId}&field:LCLTY_PRMT_NB=${permitNumber}&field:LCLTY_CLLCT_DT=${collectionDateString}&field:LCLTY_CMMNT_TX=${comment}`;
     const documentsLink = `https://survey123.arcgis.com/share/${config.documentsFormId}?field:LocalityID=${this.state.localityId}&field:Comment1=${photoId}`;
     return this.state.disabled ? (
       <div>
