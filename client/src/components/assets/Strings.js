@@ -24,10 +24,21 @@ const Strings = {
     jacketId: 'Jacket #',
     locality: 'Locality',
     specimenType: 'Specimen Type',
-    // GoogleItem
+    // both Items
+    areYouSure: 'Are you sure?',
     itemTitle: 'Jacket',
-    participants: 'Participants',
     returnToQueue: 'Return to Queue',
+    // ArcgisItem
+    cancel: 'Cancel',
+    deleteAndReturnToQueue: 'Delete and Return to Queue',
+    documentsLink: 'Locality Documents Form',
+    done: 'Done',
+    downloadPhotos: 'Download Photos',
+    localityNotFound: 'Locality Not Found',
+    specimenComments: 'Specimen Comments',
+    visitLink: 'Locality Visit Form',
+    // GoogleItem
+    participants: 'Participants',
     submitParticipants: 'Submit Participants',
   },
   'es-MX': {
@@ -52,10 +63,21 @@ const Strings = {
     jacketNumber: 'Sobrecubierta #',
     locality: 'Localidad',
     specimenType: 'Tipo de Muestra',
-    // GoogleItem
+    // both Items
+    areYouSure: '¿Está seguro?',
     itemTitle: 'Sobrecubierta',
-    participants: 'Partícipes',
     returnToQueue: 'Volver a la Cola',
+    // ArcgisItem
+    cancel: 'Cancelar',
+    deleteAndReturnToQueue: 'Borrar y Volver a la Cola',
+    documentsLink: 'Formulario de Documentos de Localidad',
+    done: 'Completo',
+    downloadPhotos: 'Descargar Fotos',
+    localityNotFound: 'Localidad No Encontrada',
+    specimenComments: 'Observaciones de Muestra',
+    visitLink: 'Formulario de Visita de Localidad',
+    // GoogleItem
+    participants: 'Partícipes',
     submitParticipants: 'Enviar Partícipes',
   },
 };

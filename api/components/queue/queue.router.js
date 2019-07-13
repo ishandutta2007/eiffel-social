@@ -4,6 +4,12 @@ module.exports = function QueueRouter(queueController) {
 
     const router = express.Router();
 
+    router.get('/arcgis/:jid/photo', (req, res, next) => {
+        queueController.getPhotos(req.params.jid, res)
+            .then(() => { /* archiver streams to res */ })
+            .catch(next);
+    });
+
     router.get('/google/participants', (req, res, next) => {
         queueController.getParticipants()
             .then((participants) => { res.status(200).send(participants); })
@@ -25,6 +31,12 @@ module.exports = function QueueRouter(queueController) {
     router.get('/:provider/:jid', (req, res, next) => {
         queueController.getQueueItem(req.params.provider, req.params.jid)
             .then((jacket) => { res.status(200).send(jacket); })
+            .catch(next);
+    });
+
+    router.delete('/:provider/:jid', (req, res, next) => {
+        queueController.deleteQueueItem(req.params.provider, req.params.jid)
+            .then(() => { res.status(200).send({ status: 'OK' }); })
             .catch(next);
     });
 

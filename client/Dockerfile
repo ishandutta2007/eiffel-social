@@ -1,5 +1,7 @@
 FROM node:10-alpine
 
+RUN apk add coreutils
+
 ENV HOME=/eiffel-social-client
 RUN mkdir -p $HOME
 WORKDIR $HOME

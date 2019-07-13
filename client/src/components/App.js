@@ -6,6 +6,7 @@ import './App.css';
 
 import Login from './Login.js';
 import { defaultQueueRender, Table } from './Table.js';
+import ArcgisItem from './ArcgisItem.js';
 import GoogleItem from './GoogleItem.js';
 
 const loggedInRender = () => {
@@ -28,6 +29,7 @@ class App extends Component {
           <Route exact path="/login" component={Login} />
           <Route exact path="/queue" render={defaultQueueRender}/>
           <Route exact path="/queue/:queueName" component={Table} />
+          <Route exact path="/queue/arcgis/:jid" component={ArcgisItem} />
           <Route exact path="/queue/google/:jid" component={GoogleItem} />
         </div>
       </Router>

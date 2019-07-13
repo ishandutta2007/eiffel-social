@@ -5,6 +5,15 @@ const qids = {
     'google': 2,
     'arcgis': 3,
 };
+const mimeImageTypes = {
+  'image/bmp': 'bmp',
+  'image/gif': 'gif',
+  'image/jpeg': 'jpg',
+  'image/png': 'png',
+  'image/svg+xml': 'svg',
+  'image/tiff': 'tif',
+  'image/webp': 'webp',
+};
 
 const config = require('./config.json');
 
@@ -13,12 +22,34 @@ module.exports = function(db) {
     const AuthService = require('../auth/auth.service.js');
     const { oauthApiCall } = new AuthService(db);
 
+    const photosSelectQuery = 'select pid, image from photos where jid=$1';
+    const imageDataUriRegexp = new RegExp('^data:(image/.{3,16});base64,');
+    const getPhotos = async (jid, archive) => {
+        const photosSelectResult = await db.query(photosSelectQuery, [jid]);
+        if (!photosSelectResult.rows.length) { return null; }
+        const photos = photosSelectResult.rows.map((photo) => {
+            const imageDataUri = photo.image;
+            const match = imageDataUri.match(imageDataUriRegexp);
+            return {
+                pid: photo.pid,
+                type: match[1],
+                image: Buffer.from(imageDataUri.slice(match[0].length), 'base64'),
+            };
+        });
+        photos.forEach((photo) => {
+            const filename = `${photo.pid}.${mimeImageTypes[photo.type]}`;
+            archive.append(photo.image, { name: filename });
+        });
+    };
+
     const jacketFields = [
         'expedition',
         'jacketNumber',
         'created',
         'locality',
         'specimenType',
+        'notes',
+        'tid',
     ];
     const jacketFieldsString = jacketFields.map((field) => `j.${field}`).join(', ');
 
@@ -200,6 +231,7 @@ module.exports = function(db) {
     };
 
     return {
+        getPhotos: getPhotos,
         getQueue: getQueue,
         getQueueItem: getQueueItem,
         deleteQueueItem: deleteQueueItem,

@@ -1,0 +1,9 @@
+{
+  "domain": "${DOMAIN}",
+  "visitFormId": "1234567890abcdef1234567890abcdef",
+  "documentsFormId": "1234567890abcdef1234567890abcdef",
+  "some locality name": {
+    "localityId": "12345678-90ab-cdef-1234-567890abcdef",
+    "permitNumber": "MT-Cabc-SRP-xyzw"
+  }
+}
