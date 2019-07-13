@@ -2,6 +2,11 @@ const archiver = require('archiver');
 
 module.exports = function(queueService) {
 
+    const hasPhotos = async (jid) => {
+        const answer = await queueService.hasPhotos(jid);
+        return answer;
+    };
+
     const getPhotos = async (jid, res) => {
         const archive = archiver('zip', { zlib: { level: 9 } });
         archive.on('error', function(err) {
@@ -40,6 +45,7 @@ module.exports = function(queueService) {
     };
 
     return {
+        hasPhotos: hasPhotos,
         getPhotos: getPhotos,
         getQueue: getQueue,
         getQueueItem: getQueueItem,

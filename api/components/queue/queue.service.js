@@ -22,6 +22,13 @@ module.exports = function(db) {
     const AuthService = require('../auth/auth.service.js');
     const { oauthApiCall } = new AuthService(db);
 
+    const photosCountQuery = 'select count(*) as n from photos where jid=$1';
+    const hasPhotos = async (jid) => {
+        const photosCountResult = await db.query(photosCountQuery, [jid]);
+        const photosCount = photosCountResult.rows[0].n;
+        return { hasPhotos: photosCount>0 };
+    };
+
     const photosSelectQuery = 'select pid, image from photos where jid=$1';
     const imageDataUriRegexp = new RegExp('^data:(image/.{3,16});base64,');
     const getPhotos = async (jid, archive) => {
@@ -231,6 +238,7 @@ module.exports = function(db) {
     };
 
     return {
+        hasPhotos: hasPhotos,
         getPhotos: getPhotos,
         getQueue: getQueue,
         getQueueItem: getQueueItem,

@@ -9,6 +9,7 @@ class ArcgisItem extends Component {
     super(props);
     this.state = {
       disabled: false,
+      hasPhotos: false,
       jacket: {},
       localityId: '',
       permitNumber: '',
@@ -51,6 +52,18 @@ class ArcgisItem extends Component {
     });
   };
 
+  fetchHasPhotos = async () => {
+    try {
+      const jid = this.props.match.params.jid;
+      const answer = await this.fetchItem(`/queue/arcgis/${jid}/hasPhotos`);
+      this.setState({ hasPhotos: answer.hasPhotos });
+    }
+    catch (err) {
+      this.setState({ disabled: true, jacket: {} });
+      alert(`${Strings.fetchErrorMessage}: ${JSON.stringify(err)}`);
+    }
+  };
+
   fetchJacket = async () => {
     try {
       const jid = this.props.match.params.jid;
@@ -70,6 +83,7 @@ class ArcgisItem extends Component {
   };
 
   componentDidMount() {
+    this.fetchHasPhotos();
     this.fetchJacket();
   }
 
@@ -145,7 +159,7 @@ class ArcgisItem extends Component {
                 <td><a className={'btn btn-success col-md-3'} href={visitLink} target="_blank">{Strings.visitLink}</a></td>
               </tr>
               <tr className="downloadPhotos">
-                <td>{Strings.downloadPhotos}</td>
+                <td>{Strings.downloadPhotos} ({this.state.hasPhotos ? 'true' : 'false'})</td>
                 <td><a className={'btn btn-success col-md-3'} href={downloadPhotosLink}>{Strings.downloadPhotos}</a></td>
               </tr>
               <tr className="documentsLink">

@@ -4,6 +4,12 @@ module.exports = function QueueRouter(queueController) {
 
     const router = express.Router();
 
+    router.get('/arcgis/:jid/hasPhotos', (req, res, next) => {
+        queueController.hasPhotos(req.params.jid)
+            .then((answer) => { res.status(200).send(answer); })
+            .catch(next);
+    });
+
     router.get('/arcgis/:jid/photo', (req, res, next) => {
         queueController.getPhotos(req.params.jid, res)
             .then(() => { /* archiver streams to res */ })
