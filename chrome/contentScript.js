@@ -35,10 +35,12 @@ const fillInForm = () => {
   }
 
   // specimen comments from jacket data (in field:LCLTY_SPECM_CMMTS that gets ignored because it's in a repeat)
-  const specimenCommentsIndex = window.location.search.indexOf('field:LCLTY_SPECM_CMMTS=') + 24;
-  const specimenComments = decodeURIComponent(window.location.search.slice(specimenCommentsIndex));
-  const specimenCommentsElement = document.querySelector('textarea[name$="LCLTY_SPECM_CMMTS"]');
-  specimenCommentsElement.value = specimenComments;
+  const specimenCommentsIndex = window.location.search.indexOf('field:LCLTY_SPECM_CMMTS=');
+  if (specimenCommentsIndex > -1) {
+    const specimenComments = decodeURIComponent(window.location.search.slice(specimenCommentsIndex + 24));
+    const specimenCommentsElement = document.querySelector('textarea[name$="LCLTY_SPECM_CMMTS"]');
+    specimenCommentsElement.value = specimenComments;
+  }
 
   // approx # of specimens = 1
   const specimenCountElement = document.querySelector('input[type="text"][name$="NB_SPEC"]');
