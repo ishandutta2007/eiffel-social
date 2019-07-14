@@ -13,7 +13,7 @@
     {
       "matches": ["https://survey123.arcgis.com/share/*"],
       "run_at": "document_idle",
-      "js": ["config.js", "contentScript.js"]
+      "js": ["config.js", "taxa.js", "contentScript.js"]
     }
   ]
 }

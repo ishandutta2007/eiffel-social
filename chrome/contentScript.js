@@ -24,6 +24,16 @@ const fillInForm = () => {
   const inSituElement = document.querySelector('input[type="radio"][data-name$="LCLTY_SPECM_SITU_TX"][value="In_Situ"]');
   inSituElement.click();
 
+  // guess taxon from locality
+  const taxonNumberElement = document.querySelector('input[type="text"][data-name$="TAXA_ID"]');
+  const taxonTextElement = document.querySelector('input[type="text"][list*="TAXAID"].autocomplete');
+  const localityId = localityIdElement.value.toUpperCase();
+  if (localityId in config.localityTaxa) {
+    const taxon = config.localityTaxa[localityId];
+    taxonNumberElement.value = taxaIds[taxon];
+    taxonTextElement.value = taxon;
+  }
+
   // specimen comments from jacket data (in fragment)
   const specimenComments = decodeURIComponent(window.location.hash.slice(1));
   const specimenCommentsElement = document.querySelector('textarea[name$="LCLTY_SPECM_CMMTS"]');
