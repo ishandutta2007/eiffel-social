@@ -117,7 +117,7 @@ class ArcgisItem extends Component {
     const comment = encodeURIComponent(notes);
     const specimenComments = `Specimen #: ${jacketnumber} // Tag ID: ${tid} // Specimen type: ${specimentype}`;
     const photoId = encodeURIComponent(`Specimen #: ${jacketnumber} // Photo ID: [INSERT_PHOTO_ID]`);
-    const visitLink = `https://survey123.arcgis.com/share/${config.visitFormId}?field:PL_LCLTY_ID=${this.state.localityId}&field:LCLTY_PRMT_NB=${permitNumber}&field:LCLTY_CLLCT_DT=${collectionDateString}&field:LCLTY_CMMNT_TX=${comment}#${encodeURIComponent(specimenComments)}`;
+    const visitLink = `https://survey123.arcgis.com/share/${config.visitFormId}?field:PL_LCLTY_ID=${this.state.localityId}&field:LCLTY_PRMT_NB=${permitNumber}&field:LCLTY_CLLCT_DT=${collectionDateString}&field:LCLTY_CMMNT_TX=${comment}&field:LCLTY_SPECM_CMMTS=${encodeURIComponent(specimenComments)}`;
     const documentsLink = `https://survey123.arcgis.com/share/${config.documentsFormId}?field:LocalityID=${this.state.localityId}&field:Comment1=${photoId}`;
     return this.state.disabled ? (
       <div>

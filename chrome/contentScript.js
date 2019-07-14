@@ -34,8 +34,9 @@ const fillInForm = () => {
     taxonTextElement.value = taxon;
   }
 
-  // specimen comments from jacket data (in fragment)
-  const specimenComments = decodeURIComponent(window.location.hash.slice(1));
+  // specimen comments from jacket data (in field:LCLTY_SPECM_CMMTS that gets ignored because it's in a repeat)
+  const specimenCommentsIndex = window.location.search.indexOf('field:LCLTY_SPECM_CMMTS=') + 24;
+  const specimenComments = decodeURIComponent(window.location.search.slice(specimenCommentsIndex));
   const specimenCommentsElement = document.querySelector('textarea[name$="LCLTY_SPECM_CMMTS"]');
   specimenCommentsElement.value = specimenComments;
 
