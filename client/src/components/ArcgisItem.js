@@ -115,8 +115,9 @@ class ArcgisItem extends Component {
     const pad = (n) => (n>9 ? n : '0' + n);
     const collectionDateString = `${collectionDate.getFullYear()}-${pad(1+collectionDate.getMonth())}-${pad(collectionDate.getDate())}`;
     const comment = encodeURIComponent(notes);
+    const specimenComments = `Specimen #: ${jacketnumber} // Tag ID: ${tid} // Specimen type: ${specimentype}`;
     const photoId = encodeURIComponent(`Specimen #: ${jacketnumber} // Photo ID: [INSERT_PHOTO_ID]`);
-    const visitLink = `https://survey123.arcgis.com/share/${config.visitFormId}?field:PL_LCLTY_ID=${this.state.localityId}&field:LCLTY_PRMT_NB=${permitNumber}&field:LCLTY_CLLCT_DT=${collectionDateString}&field:LCLTY_CMMNT_TX=${comment}`;
+    const visitLink = `https://survey123.arcgis.com/share/${config.visitFormId}?field:PL_LCLTY_ID=${this.state.localityId}&field:LCLTY_PRMT_NB=${permitNumber}&field:LCLTY_CLLCT_DT=${collectionDateString}&field:LCLTY_CMMNT_TX=${comment}#${encodeURIComponent(specimenComments)}`;
     const documentsLink = `https://survey123.arcgis.com/share/${config.documentsFormId}?field:LocalityID=${this.state.localityId}&field:Comment1=${photoId}`;
     return this.state.disabled ? (
       <div>
@@ -126,7 +127,7 @@ class ArcgisItem extends Component {
             <tbody>
               <tr className="specimenComments">
                 <td>{Strings.specimenComments}</td>
-                <td>{`Specimen #: ${jacketnumber} // Tag ID: ${tid} // Specimen type: ${specimentype}`}</td>
+                <td>{specimenComments}</td>
               </tr>
               <tr className="downloadPhotos">
                 <td>{Strings.downloadPhotos}</td>
@@ -152,7 +153,7 @@ class ArcgisItem extends Component {
             <tbody>
               <tr className="specimenComments">
                 <td>{Strings.specimenComments}</td>
-                <td>{`Specimen #: ${jacketnumber} // Tag ID: ${tid} // Specimen type: ${specimentype}`}</td>
+                <td>{specimenComments}</td>
               </tr>
               <tr className="visitLink">
                 <td>{Strings.visitLink}</td>

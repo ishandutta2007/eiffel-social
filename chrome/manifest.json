@@ -1,0 +1,19 @@
+{
+  "manifest_version": 2,
+  "name": "Locality Visit Extension",
+  "version": "1.0",
+  "description": "Modifies ArcGIS surveys for BLM locality visit forms.",
+  "icons": {
+    "32": "icons/brachiosaurus-32.png",
+    "48": "icons/brachiosaurus-48.png",
+    "64": "icons/brachiosaurus-64.png",
+    "128": "icons/brachiosaurus-128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://survey123.arcgis.com/share/*"],
+      "run_at": "document_idle",
+      "js": ["config.js", "contentScript.js"]
+    }
+  ]
+}
