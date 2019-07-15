@@ -1,4 +1,8 @@
 var fillIntervalID;
+const triggerChange = (element) => {
+  const event = new Event('change', { bubbles: true, cancelable: false });
+  element.dispatchEvent(event);
+};
 
 const fillInForm = () => {
   // check that the path matches the form ID we want
@@ -17,6 +21,7 @@ const fillInForm = () => {
   // <option value="Cincinnati Museum Center" data-value="24">
   repositoryNumberElement.value = 24;
   repositoryTextElement.value = "Cincinnati Museum Center";
+  triggerChange(repositoryNumberElement);
 
   // in situ = true, and field action = collected
   const fieldActionElement = document.querySelector('input[type="radio"][data-name$="CollectedorObserved"][value="Collected"]');
@@ -32,6 +37,7 @@ const fillInForm = () => {
     const taxon = config.localityTaxa[localityId];
     taxonNumberElement.value = taxaIds[taxon];
     taxonTextElement.value = taxon;
+    triggerChange(taxonNumberElement);
   }
 
   // specimen comments from jacket data (in field:LCLTY_SPECM_CMMTS that gets ignored because it's in a repeat)
@@ -40,11 +46,13 @@ const fillInForm = () => {
     const specimenComments = decodeURIComponent(window.location.search.slice(specimenCommentsIndex + 24));
     const specimenCommentsElement = document.querySelector('textarea[name$="LCLTY_SPECM_CMMTS"]');
     specimenCommentsElement.value = specimenComments;
+    triggerChange(specimenCommentsElement);
   }
 
   // approx # of specimens = 1
   const specimenCountElement = document.querySelector('input[type="text"][name$="NB_SPEC"]');
   specimenCountElement.value = 1;
+  triggerChange(specimenCountElement);
 
   // we're done: clear the timer
   window.clearInterval(fillIntervalID);
