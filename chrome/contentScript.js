@@ -6,7 +6,7 @@ const triggerChange = (element) => {
 
 const fillInForm = () => {
   // check that the path matches the form ID we want
-  if (`/share/${config.visitFormId}` !== window.location.pathname) { return; }
+  if (`/share/${config.visitFormId}` !== window.location.pathname) { window.clearInterval(fillIntervalID); return; }
 
   // check that ArcGIS has finished loading the form
   const localityIdElement = document.querySelector('input[type="text"][name$="PL_LCLTY_ID"]');
